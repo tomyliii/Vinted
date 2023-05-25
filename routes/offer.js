@@ -109,7 +109,7 @@ router.post(
         }
         await newOffer.save();
         return res
-          .status(200)
+          .status(201)
           .json({ message: "Offre créée.", data: newOffer });
       } else {
         throw {
