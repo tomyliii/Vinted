@@ -44,8 +44,6 @@ router.post("/user/signup", fileUpload(), async (req, res) => {
           secure_url: avatar.secure_url,
         };
       } else {
-        console.log("if");
-
         const avatar = await cloudinary.api.resources({
           type: "upload",
           prefix: "vinted/customer_avatar/CustomerStandar/Avatar",
