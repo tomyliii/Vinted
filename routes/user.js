@@ -31,7 +31,7 @@ router.post("/user/signup", fileUpload(), async (req, res) => {
         hash,
         token,
       });
-      if (req.files.avatar) {
+      if (req.files?.avatar) {
         const avatar = await cloudinary.uploader.upload(
           convertToBase64(req.files.avatar),
           {
@@ -61,6 +61,7 @@ router.post("/user/signup", fileUpload(), async (req, res) => {
       throw { message: "Mail déjà utilisé." };
     }
   } catch (error) {
+    console.log(error);
     if (error.status)
       return res.status(error.status).json({ message: error.message });
     else {
