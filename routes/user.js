@@ -43,6 +43,21 @@ router.post("/user/signup", fileUpload(), async (req, res) => {
           public_id: "avatar_" + newUser.id,
           secure_url: avatar.secure_url,
         };
+      } else {
+        console.log("if");
+
+        const avatar = await cloudinary.api.resources({
+          type: "upload",
+          prefix: "vinted/customer_avatar/CustomerStandar/Avatar",
+        });
+        const randomeNumber = Math.floor(
+          Math.random() * avatar.resources.length
+        );
+        console.log(randomeNumber);
+        newUser.avatar = {
+          public_id: avatar.resources[randomeNumber].public_id,
+          secure_url: avatar.resources[randomeNumber].secure_url,
+        };
       }
 
       await newUser.save();

@@ -51,6 +51,12 @@ router.post(
   fileUpload(),
   async (req, res) => {
     try {
+      console.log(req.files);
+      if (!req.files) {
+        throw {
+          message: "Veuillez ajouter au moin une image de votre article.",
+        };
+      }
       const { name, brand, color, size, condition, price, descr, place } =
         req.body;
 
@@ -101,7 +107,7 @@ router.post(
               folder: "/vinted/offers/" + newOffer.id,
             }
           );
-
+          console.log(result);
           newOffer.product_image.image1 = {
             public_id: result.public_id,
             secure_url: result.secure_url,
@@ -134,7 +140,9 @@ router.put("/offer/edit", isAuthentificated, fileUpload(), async (req, res) => {
     if (!(await Offer.findById(req.body.idOffer))) {
       throw { message: "Aucune annonce trouvée.", status: 404 };
     }
-    const offer = await Offer.findById(req.body.idOffer).populate("owner");
+    const offer = await Offer.findById(req.body.idOffer)
+      .populate("owner", " avatar username -_id")
+      .select("-__v");
     // crash si mauvais id
 
     if (user.id === offer.owner.id) {
@@ -402,7 +410,7 @@ router.get("/offer/:id", async (req, res) => {
           .status(200)
           .json({ message: "Voici l'offre trouvée.", data: offer });
       } else {
-        throw { message: "Offre introuvable. Verifier l'ID.", status: 400 };
+        throw { message: "Offre introuvable. Verifier l'ID.", status: 404 };
       }
     } else {
       throw { message: "ID manquante.", status: 400 };
