@@ -16,7 +16,7 @@ app.use(userRoutes);
 
 app.get("/", (req, res) => {
   try {
-    return res.status(200).json("Bienvenu sur le serveur de Vinted.");
+    return res.status(200).json("Bienvenue sur le serveur de Vinted.");
   } catch (error) {
     if (error.status)
       return res.status(error.status).json({ message: error.message });
